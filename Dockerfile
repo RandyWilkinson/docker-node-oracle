@@ -1,17 +1,16 @@
 FROM node:7.7.3
 
-RUN apt-get update \
+ADD ./oracle/ /tmp
+
+RUN mkdir -p opt/oracle \
+  && apt-get update \
   && apt-get install -y libaio1 \
   && apt-get install -y build-essential \
   && apt-get install -y unzip \
-  && apt-get install -y curl
-
-RUN mkdir -p opt/oracle
-ADD ./oracle/ .
-
-RUN unzip instantclient-basic-linux.x64-12.1.0.2.0.zip -d /opt/oracle \
-  && unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /opt/oracle  \
-  && unzip instantclient-sqlplus-linux.x64-12.1.0.2.0.zip -d /opt/oracle \
+  && apt-get install -y curl \
+  && unzip /tmp/instantclient-basic-linux.x64-12.1.0.2.0.zip -d /opt/oracle \
+  && unzip /tmp/instantclient-sdk-linux.x64-12.1.0.2.0.zip -d /opt/oracle  \
+  && unzip /tmp/instantclient-sqlplus-linux.x64-12.1.0.2.0.zip -d /opt/oracle \
   && mv /opt/oracle/instantclient_12_1 /opt/oracle/instantclient \
   && ln -s /opt/oracle/instantclient/libclntsh.so.12.1 /opt/oracle/instantclient/libclntsh.so \
   && ln -s /opt/oracle/instantclient/libocci.so.12.1 /opt/oracle/instantclient/libocci.so
